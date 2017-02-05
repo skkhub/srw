@@ -4,12 +4,12 @@
   "description": "skk",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --hot --inline",
+    "dev": "webpack-dev-server --hot --inline",
     "build": "webpack --progress --profile --colors --config webpack.config.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/skkhub/planA.git"
+    "url": "git+https://github.com/skkhub/srw.git"
   },
   "keywords": [
     "webpack",
@@ -18,9 +18,9 @@
   "author": "skk",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/skkhub/planA/issues"
+    "url": "https://github.com/skkhub/srw/issues"
   },
-  "homepage": "https://github.com/skkhub/planA#readme",
+  "homepage": "https://github.com/skkhub/srw#readme",
   "dependencies": {
     "vue": "^2.1.10",
     "webpack": "^1.13.3"
@@ -35,8 +35,8 @@
     "imports-loader": "^0.6.5",
     "jquery": "^3.1.1",
     "jshint-loader": "^0.8.3",
-    "moment": "^2.15.2",
-    "node-sass": "^3.10.1",
+    "moment": "^2.17.1",
+    "node-sass": "^4.4.0",
     "sass-loader": "^4.1.1",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",

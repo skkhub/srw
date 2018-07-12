@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --hot --inline",
-    "build": "webpack --progress --profile --colors --config webpack.config.js"
+    "build": "webpack --profile --colors --config webpack.config.js",
+    "build2": "webpack --progress --profile --colors --config webpack.config.js"
   },
   "repository": {
     "type": "git",
@@ -21,27 +22,16 @@
     "url": "https://github.com/skkhub/srw/issues"
   },
   "homepage": "https://github.com/skkhub/srw#readme",
-  "dependencies": {
-    "vue": "^2.1.10",
-    "webpack": "^1.13.3"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "autoprefixer-loader": "^3.2.0",
-    "babel-core": "^6.18.2",
-    "babel-loader": "^6.2.10",
-    "babel-preset-es2015": "^6.22.0",
-    "css-loader": "^0.25.0",
-    "html-webpack-plugin": "^2.26.0",
-    "imports-loader": "^0.6.5",
-    "jquery": "^3.1.1",
-    "jshint-loader": "^0.8.3",
-    "moment": "^2.17.1",
-    "node-sass": "^4.4.0",
-    "sass-loader": "^4.1.1",
-    "style-loader": "^0.13.1",
-    "url-loader": "^0.5.7",
-    "webpack": "^1.13.3",
-    "webpack-dev-middleware": "^1.9.0",
-    "webpack-dev-server": "^1.16.2"
+    "css-loader": "^1.0.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^0.21.0",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.15.0",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.4"
   }
 }

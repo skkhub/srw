@@ -1,50 +1,37 @@
 import Sprite from '../base/sprite'
 
-const screenWidth  = window.innerWidth
-const screenHeight = window.innerHeight
+const SCREEN_WIDTH  = window.innerWidth
+const SCREEN_HEIGHT = window.innerHeight
 
-const BG_IMG_SRC   = 'images/bg.jpg'
+// const BG_IMG_SRC   = 'images/bg.jpg'
 const BG_WIDTH     = 512
 const BG_HEIGHT    = 512
 
 /**
  * 游戏背景类
- * 提供update和render函数实现无限滚动的背景功能
+ * 提供update和render函数
  */
 export default class BackGround extends Sprite {
-  constructor(ctx) {
-    super(BG_IMG_SRC, BG_WIDTH, BG_HEIGHT)
+  constructor(ctx, bgInfo) {
+    super(bgInfo.bgImgSrc, BG_WIDTH, BG_HEIGHT)
+
+    this.mapWidth = bgInfo.mapWidth
+    this.mapHeight = bgInfo.mapHeight
+    this.hasDraw = false
 
     this.render(ctx)
-
-    this.top = 0
   }
 
   update() {
-    this.top += 2
-
-    if ( this.top >= screenHeight )
-      this.top = 0
+    
   }
 
   /**
    * 背景图重绘函数
-   * 绘制两张图片，两张图片大小和屏幕一致
-   * 第一张漏出高度为top部分，其余的隐藏在屏幕上面
-   * 第二张补全除了top高度之外的部分，其余的隐藏在屏幕下面
+   * 
    */
   render(ctx) {
-    ctx.drawImage(
-      this.img,
-      0,
-      0,
-      this.width,
-      this.height,
-      0,
-      -screenHeight + this.top,
-      screenWidth,
-      screenHeight
-    )
+    if (this.hasDraw) return
 
     ctx.drawImage(
       this.img,
@@ -53,9 +40,29 @@ export default class BackGround extends Sprite {
       this.width,
       this.height,
       0,
-      this.top,
-      screenWidth,
-      screenHeight
+      0,
+      getLen(this.mapWidth),
+      getLen(this.mapHeight)
     )
+
+    this.drawGrid(ctx)
+
+    // this.hasDraw = true
+  }
+  /**
+   * 绘制地图栅格
+   */
+  drawGrid(ctx) {
+    ctx.beginPath()
+    for (let i = 0; i <= this.mapWidth; i++) {
+      ctx.moveTo(getLen(i), 0)
+      ctx.lineTo(getLen(i), getLen(this.mapHeight))
+    }
+    for (let i = 0; i <= this.mapHeight; i++) {
+      ctx.moveTo(0, getLen(i))
+      ctx.lineTo(getLen(this.mapWidth), getLen(i))
+    }
+    ctx.stroke()
+    ctx.closePath()
   }
 }

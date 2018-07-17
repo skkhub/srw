@@ -7,8 +7,21 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
-module.exports = {
-  mode: 'development',
+function getIPAdress(){
+  var interfaces = require('os').networkInterfaces();
+  for(var devName in interfaces){
+    var iface = interfaces[devName];
+    for(var i=0;i<iface.length;i++){
+      var alias = iface[i];
+      if(alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal){
+        return alias.address;
+      }
+    }
+  }
+}
+
+module.exports = (env, argv) => ({
+  // mode: 'development',
 
   devtool: '#eval-source-map',
 
@@ -18,8 +31,8 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: './',
-    filename: 'assets/[name].bundle.js'
+    publicPath: argv.mode == 'development' ? '/' : './',
+    filename: 'assets/[name].bundle.[hash].js'
   },
   resolve: {
     extensions: ['.js', '.json'],
@@ -38,10 +51,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'srw',
       template: './index.html'
-    }),
-    // new ExtractTextPlugin({
-    //   filename: 'css/[name].[contenthash].css'
-    // })
+    })
   ],
 
   devServer: {
@@ -49,7 +59,10 @@ module.exports = {
     inline: true,
     contentBase: './dist',
     hot: true,
-    historyApiFallback: true
+    historyApiFallback: true,
+    overlay: true,
+    stats: 'errors-only',
+    host: getIPAdress()
   },
 
   module: {
@@ -63,14 +76,17 @@ module.exports = {
         loader: 'url-loader',
         query: {
           limit: 8192,
-          outputPath: 'assets/',
+          outputPath: 'assets/images/',
           name: '[name].[hash].[ext]'
         }
       },
       {
         test: /\.(mp3|wav|wma)$/i,
-        loader: 'file-loader'
+        loader: 'file-loader',
+        query: {
+          outputPath: 'assets/audio/'
+        }
       }
     ]
   }
-};
+});

@@ -1,11 +1,21 @@
 import Player from './player/index'
+import Robot from './robot/robot'
 import Enemy from './npc/enemy'
 import BackGround from './runtime/background'
 import GameInfo from './runtime/gameinfo'
 import Music from './runtime/music'
 import DataBus from './databus'
-// import './style.css';
-let ctx = canvas.getContext('2d')
+import Viewport from './runtime/viewport'
+
+const canvas = document.getElementById('canvas')
+const offscreenCanvas = document.createElement('canvas')
+offscreenCanvas.width = canvas.width = SCREEN_WIDTH
+offscreenCanvas.height = canvas.height = SCREEN_HEIGHT
+
+const ctx = offscreenCanvas.getContext('2d')
+const mainCtx = canvas.getContext('2d')
+// const ctx = canvas.getContext('2d')
+
 let databus = new DataBus()
 
 /**
@@ -17,25 +27,36 @@ export default class Main {
   }
 
   restart() {
+
+    // this.loadData()
+    // this.renderBg()
+    // this.generateRobot()
+    // this.bindEvent()
+
+    let mission = require('./data/missions')
+
     canvas.removeEventListener(
       'touchstart',
       this.touchHandler
     )
 
-    this.bg = new BackGround(ctx)
-    this.player = new Player(ctx)
+    this.bg = new BackGround(ctx, mission.bgInfo)
+    // this.player = new Robot(ctx)
     this.gameinfo = new GameInfo()
-    this.music = new Music()
-
-    databus.reset()
-    this.music.playBgm()
-
+    // this.music = new Music()
+    this.viewportManager = new Viewport(canvas, ctx, mission.bgInfo.mapWidth, mission.bgInfo.mapHeight)
+    // databus.reset()
+    // this.music.playBgm()
+    
     window.requestAnimationFrame(
       this.loop.bind(this),
       canvas
     )
   }
 
+  robotGenerate() {
+
+  }
   /**
    * 随着帧数变化的敌机生成逻辑
    * 帧数取模定义成生成的频率
@@ -43,7 +64,7 @@ export default class Main {
   enemyGenerate() {
     if (databus.frame % 30 === 0) {
       let enemy = databus.pool.getItemByClass('enemy', Enemy)
-      enemy.init(6)
+      enemy.init(1)
       databus.enemys.push(enemy)
     }
   }
@@ -100,7 +121,10 @@ export default class Main {
    * 每一帧重新绘制所有的需要展示的元素
    */
   render() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    // console.log('render')
+    // console.log(canvas.width, canvas.height)
+    this.viewportManager.clearRect()
+    mainCtx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
     this.bg.render(ctx)
 
@@ -110,7 +134,7 @@ export default class Main {
         item.drawToCanvas(ctx)
       })
 
-    this.player.drawToCanvas(ctx)
+    // this.player.drawToCanvas(ctx)
 
     databus.animations.forEach((ani) => {
       if (ani.isPlaying) {
@@ -119,6 +143,8 @@ export default class Main {
     })
 
     this.gameinfo.renderGameScore(ctx, databus.score)
+
+    mainCtx.drawImage(offscreenCanvas, 0, 0)
   }
 
   // 游戏逻辑更新主函数
@@ -131,9 +157,9 @@ export default class Main {
         item.update()
       })
 
-    this.enemyGenerate()
+    // this.enemyGenerate()
 
-    this.collisionDetection()
+    // this.collisionDetection()
   }
 
   // 实现游戏帧循环
@@ -144,14 +170,14 @@ export default class Main {
     this.render()
 
     if (databus.frame % 20 === 0) {
-      this.player.shoot()
-      this.music.playShoot()
+      // this.player.shoot()
+      // this.music.playShoot()
     }
 
     // 游戏结束停止帧循环
     if (databus.gameOver) {
       this.gameinfo.renderGameOver(ctx, databus.score)
-
+      mainCtx.drawImage(offscreenCanvas, 0, 0)
       this.music.stopAllMusic()
 
       this.touchHandler = this.touchEventHandler.bind(this)

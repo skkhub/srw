@@ -1,0 +1,35 @@
+{
+  "bgInfo": {
+    "mapWidth": 16,
+    "mapHeight": 30,
+    "bgImgSrc": "images/bg.jpg",
+    "gird": {
+      "0_0": {
+        "move": -1,
+        "defence": 0.2,
+        "agility": -0.2,
+        "hp": 0.1
+      }
+    }
+  },
+  "enemyInfo": [
+    {
+      "id": "501",
+      "position": [3,4]
+    },
+    {
+      "id": "502",
+      "position": [3,6]
+    }
+  ],
+  "playerInfo": [
+    {
+      "id": "001",
+      "position": [1,1]
+    },
+    {
+      "id": "002",
+      "position": [2,1]
+    }
+  ]
+}

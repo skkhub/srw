@@ -4,8 +4,8 @@
   "description": "skk",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --hot --inline",
-    "build": "webpack --profile --colors --config webpack.config.js",
+    "dev": "webpack-dev-server --hot --inline --open --mode=development",
+    "build": "rm -rf ./dist && webpack --profile --colors --config webpack.config.js --mode=production",
     "build2": "webpack --progress --profile --colors --config webpack.config.js"
   },
   "repository": {
@@ -22,12 +22,15 @@
     "url": "https://github.com/skkhub/srw/issues"
   },
   "homepage": "https://github.com/skkhub/srw#readme",
-  "dependencies": {},
+  "dependencies": {
+    
+  },
   "devDependencies": {
     "css-loader": "^1.0.0",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
+    "json-loader": "^0.5.7",
     "style-loader": "^0.21.0",
     "url-loader": "^1.0.1",
     "webpack": "^4.15.0",

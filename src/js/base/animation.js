@@ -11,8 +11,8 @@ const __ = {
  * 简易的帧动画类实现
  */
 export default class Animation extends Sprite {
-  constructor(imgSrc, width, height) {
-    super(imgSrc, width, height)
+  constructor(imgSrc, width, height, x, y) {
+    super(imgSrc, width, height, x, y)
 
     // 当前动画是否播放中
     this.isPlaying = false
@@ -55,14 +55,16 @@ export default class Animation extends Sprite {
     })
 
     this.count = imgList.length
+
+    return this
   }
 
   // 将播放中的帧绘制到canvas上
   aniRender(ctx) {
     ctx.drawImage(
       this.imgList[this.index],
-      this.x,
-      this.y,
+      getLen(this.x),
+      getLen(this.y),
       this.width,
       this.height
     )
@@ -84,6 +86,7 @@ export default class Animation extends Sprite {
         this.interval
       )
     }
+    return this
   }
 
   // 停止帧动画播放

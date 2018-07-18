@@ -1,18 +1,18 @@
+import Sprite from '../base/sprite'
 import Animation from '../base/animation'
 import DataBus  from '../databus'
 
 // 玩家相关常量设置
 const PLAYER_IMG_SRC = 'images/hero.png'
-const PLAYER_WIDTH   = 64
-const PLAYER_HEIGHT  = 64
 
 let databus = new DataBus()
 
-export default class Robot extends Animation {
-  constructor(imgSrc, x, y) {
-    super(imgSrc, 64, 64, x, y)
+export default class Robot extends Sprite {
+  constructor(imgSrc, x, y, properties) {
+    super(imgSrc, GRID_LENGTH, GRID_LENGTH, x, y)
 
-    this.initExplosionAnimation()
+    this
+
   }
 
   showMoveRange() {
@@ -29,8 +29,7 @@ export default class Robot extends Animation {
 
   }
 
-  initExplosionAnimation() {
-    console.log('init')
+  playExplosionAnimation() {
     let frames = []
 
     const EXPLO_IMG_PREFIX  = 'images/explosion'
@@ -39,8 +38,12 @@ export default class Robot extends Animation {
     for ( let i = 0;i < EXPLO_FRAME_COUNT;i++ ) {
       frames.push(EXPLO_IMG_PREFIX + (i + 1) + '.png')
     }
-
-    this.initFrames(frames)
+    console.log(this.x, this.y)
+    let ani = new Animation('', this.width, this.height, this.x, this.y)
+    .initFrames(frames)
+    .playAnimation()
+    
+    setTimeout(ani.playAnimation, 1000)
   }
 
 }

@@ -1,7 +1,6 @@
 //兼容代码可以这样子写
-/*
-const SCREEN_WIDTH = window.innerWidth
-const SCREEN_HEIGHT = window.innerHeight;
+export const SCREEN_WIDTH = window.innerWidth
+export const SCREEN_HEIGHT = window.innerHeight;
 
 if (typeof SCREEN_WIDTH != 'number') {       //如果类型不为number,表示该浏览器不支持innerWidth属性
 
@@ -19,14 +18,4 @@ if (typeof SCREEN_WIDTH != 'number') {       //如果类型不为number,表示�
     }
 }
 
-window.SCREEN_WIDTH = SCREEN_WIDTH
-window.SCREEN_HEIGHT = SCREEN_HEIGHT
-
-window.GRID_LENGTH = 64
-
-window.getLen = function(len) {
-  return window.GRID_LENGTH * len
-}
-*/
-import * as c from './constants'
-import * as f from './'
+export const GRID_LENGTH = 64

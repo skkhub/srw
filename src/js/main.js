@@ -41,13 +41,13 @@ export default class Main {
     )
 
     this.bg = new BackGround(ctx, mission.bgInfo)
-    // this.player = new Robot(ctx)
+    this.player = new Robot('images/hero.png', 2, 2)
     this.gameinfo = new GameInfo()
     // this.music = new Music()
     this.viewportManager = new Viewport(canvas, ctx, mission.bgInfo.mapWidth, mission.bgInfo.mapHeight)
     // databus.reset()
     // this.music.playBgm()
-    
+    this.player.playExplosionAnimation()
     window.requestAnimationFrame(
       this.loop.bind(this),
       canvas

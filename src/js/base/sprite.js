@@ -9,8 +9,8 @@ export default class Sprite {
     this.width  = width
     this.height = height
 
-    this.x = getLen(x)
-    this.y = getLen(y)
+    this.x = x
+    this.y = y
 
     this.visible = true
   }
@@ -24,8 +24,8 @@ export default class Sprite {
 
     ctx.drawImage(
       this.img,
-      this.x,
-      this.y,
+      getLen(this.x),
+      getLen(this.y),
       this.width,
       this.height
     )

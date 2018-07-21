@@ -1,8 +1,5 @@
 import Sprite from '../base/sprite'
 
-const SCREEN_WIDTH  = window.innerWidth
-const SCREEN_HEIGHT = window.innerHeight
-
 // const BG_IMG_SRC   = 'images/bg.jpg'
 const BG_WIDTH     = 512
 const BG_HEIGHT    = 512

@@ -6,6 +6,7 @@ import GameInfo from './runtime/gameinfo'
 import Music from './runtime/music'
 import DataBus from './databus'
 import Viewport from './runtime/viewport'
+import {selectRobotById} from './data/dbi'
 
 const canvas = document.getElementById('canvas')
 const offscreenCanvas = document.createElement('canvas')
@@ -39,23 +40,35 @@ export default class Main {
       'touchstart',
       this.touchHandler
     )
-
+    this.robotGenerate(mission)
     this.bg = new BackGround(ctx, mission.bgInfo)
-    this.player = new Robot('images/hero.png', 2, 2)
+    // this.player = new Robot('images/hero.png', 2, 2)
     this.gameinfo = new GameInfo()
     // this.music = new Music()
     this.viewportManager = new Viewport(canvas, ctx, mission.bgInfo.mapWidth, mission.bgInfo.mapHeight)
     // databus.reset()
     // this.music.playBgm()
-    this.player.playExplosionAnimation()
+    // this.player.playExplosionAnimation()
     window.requestAnimationFrame(
       this.loop.bind(this),
       canvas
     )
   }
+  /**
+   * robot生成逻辑
+   */
+  robotGenerate(data) {
+    let {players, enemys} = data
 
-  robotGenerate() {
+    players.forEach(item => {
+      let robotData = selectRobotById(item.id)
+      databus.players.push(new Robot(robotData, item.position))
+    })
 
+    enemys.forEach(item => {
+      let robotData = selectRobotById(item.id)
+      databus.enemys.push(new Robot(robotData, item.position))
+    })
   }
   /**
    * 随着帧数变化的敌机生成逻辑
@@ -121,14 +134,12 @@ export default class Main {
    * 每一帧重新绘制所有的需要展示的元素
    */
   render() {
-    // console.log('render')
-    // console.log(canvas.width, canvas.height)
     this.viewportManager.clearRect()
     mainCtx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
     this.bg.render(ctx)
 
-    databus.bullets
+    databus.players
       .concat(databus.enemys)
       .forEach((item) => {
         item.drawToCanvas(ctx)
@@ -166,7 +177,7 @@ export default class Main {
   loop() {
     databus.frame++
 
-    this.update()
+    // this.update()
     this.render()
 
     if (databus.frame % 20 === 0) {

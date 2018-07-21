@@ -1,5 +1,5 @@
 //兼容代码可以这样子写
-/*
+
 const SCREEN_WIDTH = window.innerWidth
 const SCREEN_HEIGHT = window.innerHeight;
 
@@ -27,6 +27,3 @@ window.GRID_LENGTH = 64
 window.getLen = function(len) {
   return window.GRID_LENGTH * len
 }
-*/
-import * as c from './constants'
-import * as f from './'

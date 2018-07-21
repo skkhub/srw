@@ -8,10 +8,10 @@ const PLAYER_IMG_SRC = 'images/hero.png'
 let databus = new DataBus()
 
 export default class Robot extends Sprite {
-  constructor(imgSrc, x, y, properties) {
-    super(imgSrc, GRID_LENGTH, GRID_LENGTH, x, y)
+  constructor(properties, position) {
+    super('images/' + properties.icon, GRID_LENGTH, GRID_LENGTH, position[0], position[1])
 
-    this
+    Object.assign(this, properties)
 
   }
 

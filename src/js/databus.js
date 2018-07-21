@@ -1,4 +1,5 @@
 import Pool from './base/pool'
+import Event from './runtime/event'
 
 let instance
 
@@ -14,6 +15,8 @@ export default class DataBus {
 
     this.pool = new Pool()
 
+    this.event = new Event()
+
     this.reset()
   }
 
@@ -22,6 +25,7 @@ export default class DataBus {
     this.score      = 0
     this.bullets    = []
     this.enemys     = []
+    this.players    = []
     this.animations = []
     this.gameOver   = false
     this.translateX = 0      // viewport偏移x

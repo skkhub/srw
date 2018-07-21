@@ -2,7 +2,7 @@
 // 模拟机器人数据库
 export default {
   '001': {
-    icon: 'robot1.jpg',
+    icon: 'hero.png',
     name: '塞巴斯塔',
     HP: 4000,
     EN: 140,
@@ -32,7 +32,7 @@ export default {
     parts: [] // 安装在机体的增强零件
   },
   '002': {
-    icon: 'robot2.jpg',
+    icon: 'hero.png',
     name: '高达Z',
     HP: 3800,
     EN: 160,
@@ -56,7 +56,7 @@ export default {
     parts: [] // 安装在机体的增强零件
   },
   '501': {
-    icon: 'robot1.jpg',
+    icon: 'enemy.png',
     name: '塞巴斯塔',
     HP: 4000,
     EN: 140,
@@ -86,7 +86,7 @@ export default {
     parts: [] // 安装在机体的增强零件
   },
   '502': {
-    icon: 'robot2.jpg',
+    icon: 'enemy.png',
     name: '高达Z',
     HP: 3800,
     EN: 160,

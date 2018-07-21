@@ -19,10 +19,10 @@ export default class Viewport {
 
     this.beginX = 0
     this.beginY = 0
+    this.beginTime = Date.now()
 
     databus.viewportTranslateX = 0
     databus.viewportTranslateY = 0
-
 
     canvas.addEventListener('touchstart', this.touchstartEventHandler.bind(this))
     canvas.addEventListener('touchmove', this.touchmoveEventHandler.bind(this))
@@ -36,20 +36,28 @@ export default class Viewport {
 
     this.beginX = e.touches[0].clientX
     this.beginY = e.touches[0].clientY
+
+    this.beginTime = Date.now()
   }
 
   touchmoveEventHandler(e) {
     e.preventDefault()
 
-    let endX = e.touches[0].clientX
-    let endY = e.touches[0].clientY
+    let currentX = e.changedTouches[0].clientX
+    let currentY = e.changedTouches[0].clientY
+    let currentTime = Date.now()
+    let dTime = currentTime - this.beginTime
+    // console.log(dTime)
+    let kx = (currentX - this.beginX) / (currentTime - this.beginTime) * 24
+    let ky = (currentY - this.beginY) / (currentTime - this.beginTime) * 24
 
-    let translateX = (endX - this.beginX) / 10
-    let translateY = (endY - this.beginY) / 10
+    console.log(kx, ky)
+    // let translateX = (currentX - this.beginX) / 10
+    // let translateY = (currentY - this.beginY) / 10
 
-    databus.viewportTranslateX += translateX
-    databus.viewportTranslateY += translateY
-
+    databus.viewportTranslateX += kx
+    databus.viewportTranslateY += ky
+/*
     if ( databus.viewportTranslateX <= SCREEN_WIDTH - this.mapWidth
          || databus.viewportTranslateX >= 0 ) {
 
@@ -62,8 +70,8 @@ export default class Viewport {
 
       translateY = 0
     }
-    
-    this.ctx.translate(translateX, translateY)
+    */
+    this.ctx.translate(kx, ky)
   }
 
   touchendEventHandler(e) {

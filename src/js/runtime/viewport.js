@@ -48,6 +48,30 @@ export default class Viewport {
     let currentTime = Date.now()
     let dTime = currentTime - this.beginTime
     // console.log(dTime)
+    let kx = (currentX - this.beginX) / (currentTime - this.beginTime) * 20
+    let ky = (currentY - this.beginY) / (currentTime - this.beginTime) * 20
+
+    console.log(kx, ky)
+    // let translateX = (currentX - this.beginX) / 10
+    // let translateY = (currentY - this.beginY) / 10
+
+    databus.viewportTranslateX += kx
+    databus.viewportTranslateY += ky
+
+    this.ctx.translate(kx, ky)
+    this.beginX = currentX
+    this.beginY = currentY
+    this.beginTime = currentTime
+  }
+
+  touchmoveEventHandlerOld(e) {
+    e.preventDefault()
+
+    let currentX = e.changedTouches[0].clientX
+    let currentY = e.changedTouches[0].clientY
+    let currentTime = Date.now()
+    let dTime = currentTime - this.beginTime
+    // console.log(dTime)
     let kx = (currentX - this.beginX) / (currentTime - this.beginTime) * 24
     let ky = (currentY - this.beginY) / (currentTime - this.beginTime) * 24
 

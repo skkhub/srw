@@ -46,17 +46,25 @@ export default class Viewport {
     let currentX = e.changedTouches[0].clientX
     let currentY = e.changedTouches[0].clientY
     let currentTime = Date.now()
-    let dTime = currentTime - this.beginTime
-    // console.log(dTime)
+
     let kx = (currentX - this.beginX) / (currentTime - this.beginTime) * 20
     let ky = (currentY - this.beginY) / (currentTime - this.beginTime) * 20
 
-    console.log(kx, ky)
-    // let translateX = (currentX - this.beginX) / 10
-    // let translateY = (currentY - this.beginY) / 10
-
     databus.viewportTranslateX += kx
     databus.viewportTranslateY += ky
+
+    if ( databus.viewportTranslateX <= SCREEN_WIDTH - this.mapWidth
+      || databus.viewportTranslateX >= 0 ) {
+
+      databus.viewportTranslateX -= kx
+      kx = 0
+    }
+    if ( databus.viewportTranslateY <= SCREEN_HEIGHT - this.mapHeight
+          || databus.viewportTranslateY >= 0) {
+      databus.viewportTranslateY -= ky
+
+      ky = 0
+    }
 
     this.ctx.translate(kx, ky)
     this.beginX = currentX

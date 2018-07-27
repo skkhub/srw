@@ -7,6 +7,7 @@ import Music from './runtime/music'
 import DataBus from './databus'
 import Viewport from './runtime/viewport'
 import {selectRobotById} from './data/dbi'
+let {SCREEN_WIDTH, SCREEN_HEIGHT} = require('src/js/utils').default
 
 const canvas = document.getElementById('canvas')
 const offscreenCanvas = document.createElement('canvas')

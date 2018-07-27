@@ -1,8 +1,6 @@
 import {GRID_LENGTH} from './constants'
 
-export function getLen(len) {
-    return GRID_LENGTH * len
-}
+export let getLen = len => GRID_LENGTH * len
 
 export let deepCopy = o => {
     if (o instanceof Array) {

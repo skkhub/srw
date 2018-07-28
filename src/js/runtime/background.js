@@ -1,5 +1,6 @@
 import Sprite from '../base/sprite'
 
+let {getLen} = require('src/js/utils').default
 // const BG_IMG_SRC   = 'images/bg.jpg'
 const BG_WIDTH     = 512
 const BG_HEIGHT    = 512

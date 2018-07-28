@@ -1,5 +1,7 @@
 import DataBus  from '../databus'
 
+let {SCREEN_WIDTH, SCREEN_HEIGHT, getLen} = require('src/js/utils').default
+
 let databus = new DataBus()
 let instance
 

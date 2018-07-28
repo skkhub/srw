@@ -1,3 +1,5 @@
+let {getLen} = require('src/js/utils').default
+
 /**
  * 游戏基础的精灵类
  */

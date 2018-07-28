@@ -2,6 +2,8 @@ import Sprite from '../base/sprite'
 import Animation from '../base/animation'
 import DataBus  from '../databus'
 
+let {GRID_LENGTH} = require('src/js/utils').default
+
 // 玩家相关常量设置
 const PLAYER_IMG_SRC = 'images/hero.png'
 

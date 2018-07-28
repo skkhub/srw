@@ -22,9 +22,7 @@
     "url": "https://github.com/skkhub/srw/issues"
   },
   "homepage": "https://github.com/skkhub/srw#readme",
-  "dependencies": {
-    
-  },
+  "dependencies": {},
   "devDependencies": {
     "css-loader": "^1.0.0",
     "extract-text-webpack-plugin": "^3.0.2",

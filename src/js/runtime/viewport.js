@@ -1,8 +1,6 @@
-import DataBus  from '../databus'
 
 let {SCREEN_WIDTH, SCREEN_HEIGHT, getLen} = require('src/js/utils').default
 
-let databus = new DataBus()
 let instance
 
 /**
@@ -19,102 +17,64 @@ export default class Viewport {
     this.mapHeight = getLen(mapHeight)
     this.ctx = ctx
 
-    this.beginX = 0
-    this.beginY = 0
-    this.beginTime = Date.now()
+    this.viewportBeginX = 0
+    this.viewportBeginY = 0
+    this.viewportBeginTime = Date.now()
+    // 记录视口的偏移
+    this.translateX = 0
+    this.translateY = 0
 
-    databus.viewportTranslateX = 0
-    databus.viewportTranslateY = 0
-
-    canvas.addEventListener('touchstart', this.touchstartEventHandler.bind(this))
-    canvas.addEventListener('touchmove', this.touchmoveEventHandler.bind(this))
-    canvas.addEventListener('touchend', this.touchendEventHandler.bind(this))
+    canvas.addEventListener('touchstart', this.viewportTouchstartHandler.bind(this))
+    canvas.addEventListener('touchmove', this.viewportTouchmoveHandler.bind(this))
+    canvas.addEventListener('touchend', this.viewportTouchendHandler.bind(this))
   }
 
-  touchstartEventHandler(e) {
+  viewportTouchstartHandler(e) {
     e.preventDefault()
 
-    databus.viewportTouched = true
+    this.viewportBeginX = e.touches[0].clientX
+    this.viewportBeginY = e.touches[0].clientY
 
-    this.beginX = e.touches[0].clientX
-    this.beginY = e.touches[0].clientY
-
-    this.beginTime = Date.now()
+    this.viewportBeginTime = Date.now()
   }
 
-  touchmoveEventHandler(e) {
+  viewportTouchmoveHandler(e) {
     e.preventDefault()
 
     let currentX = e.changedTouches[0].clientX
     let currentY = e.changedTouches[0].clientY
     let currentTime = Date.now()
 
-    let kx = (currentX - this.beginX) / (currentTime - this.beginTime) * 20
-    let ky = (currentY - this.beginY) / (currentTime - this.beginTime) * 20
+    let kx = (currentX - this.viewportBeginX) / (currentTime - this.viewportBeginTime) * 20
+    let ky = (currentY - this.viewportBeginY) / (currentTime - this.viewportBeginTime) * 20
 
-    databus.viewportTranslateX += kx
-    databus.viewportTranslateY += ky
+    this.translateX += kx
+    this.translateY += ky
 
-    if ( databus.viewportTranslateX <= SCREEN_WIDTH - this.mapWidth
-      || databus.viewportTranslateX >= 0 ) {
+    if ( this.translateX <= SCREEN_WIDTH - this.mapWidth
+      || this.translateX >= 0 ) {
 
-      databus.viewportTranslateX -= kx
+      this.translateX -= kx
       kx = 0
     }
-    if ( databus.viewportTranslateY <= SCREEN_HEIGHT - this.mapHeight
-          || databus.viewportTranslateY >= 0) {
-      databus.viewportTranslateY -= ky
+    if ( this.translateY <= SCREEN_HEIGHT - this.mapHeight
+          || this.translateY >= 0) {
+      this.translateY -= ky
 
       ky = 0
     }
 
     this.ctx.translate(kx, ky)
-    this.beginX = currentX
-    this.beginY = currentY
-    this.beginTime = currentTime
+    this.viewportBeginX = currentX
+    this.viewportBeginY = currentY
+    this.viewportBeginTime = currentTime
   }
 
-  touchmoveEventHandlerOld(e) {
+  viewportTouchendHandler(e) {
     e.preventDefault()
-
-    let currentX = e.changedTouches[0].clientX
-    let currentY = e.changedTouches[0].clientY
-    let currentTime = Date.now()
-    let dTime = currentTime - this.beginTime
-    // console.log(dTime)
-    let kx = (currentX - this.beginX) / (currentTime - this.beginTime) * 24
-    let ky = (currentY - this.beginY) / (currentTime - this.beginTime) * 24
-
-    console.log(kx, ky)
-    // let translateX = (currentX - this.beginX) / 10
-    // let translateY = (currentY - this.beginY) / 10
-
-    databus.viewportTranslateX += kx
-    databus.viewportTranslateY += ky
-/*
-    if ( databus.viewportTranslateX <= SCREEN_WIDTH - this.mapWidth
-         || databus.viewportTranslateX >= 0 ) {
-
-      databus.viewportTranslateX -= translateX
-      translateX = 0
-    }
-    if ( databus.viewportTranslateY <= SCREEN_HEIGHT - this.mapHeight
-         || databus.viewportTranslateY >= 0) {
-      databus.viewportTranslateY -= translateY
-
-      translateY = 0
-    }
-    */
-    this.ctx.translate(kx, ky)
-  }
-
-  touchendEventHandler(e) {
-    e.preventDefault()
-
-    databus.viewportTouched = false
   }
 
   clearRect() {
-    this.ctx.clearRect(-databus.viewportTranslateX, -databus.viewportTranslateY, SCREEN_WIDTH, SCREEN_HEIGHT)
+    this.ctx.clearRect(-this.translateX, -this.translateY, SCREEN_WIDTH, SCREEN_HEIGHT)
   }
 }

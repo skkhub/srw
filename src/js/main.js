@@ -5,7 +5,7 @@ import BackGround from './runtime/background'
 import GameInfo from './runtime/gameinfo'
 import Music from './runtime/music'
 import DataBus from './databus'
-import Viewport from './runtime/viewport'
+import Event from './runtime/event'
 import {selectRobotById} from './data/dbi'
 let {SCREEN_WIDTH, SCREEN_HEIGHT} = require('src/js/utils').default
 
@@ -46,7 +46,8 @@ export default class Main {
     // this.player = new Robot('images/hero.png', 2, 2)
     this.gameinfo = new GameInfo()
     // this.music = new Music()
-    this.viewportManager = new Viewport(canvas, ctx, mission.bgInfo.mapWidth, mission.bgInfo.mapHeight)
+    this.evt = new Event(canvas, ctx, mission.bgInfo.mapWidth, mission.bgInfo.mapHeight)
+    // debugger
     // databus.reset()
     // this.music.playBgm()
     // this.player.playExplosionAnimation()
@@ -63,12 +64,12 @@ export default class Main {
 
     players.forEach(item => {
       let robotData = selectRobotById(item.id)
-      databus.players.push(new Robot(robotData, item.position))
+      databus.players.push(new Robot(robotData, item.position, 0))
     })
 
     enemys.forEach(item => {
       let robotData = selectRobotById(item.id)
-      databus.enemys.push(new Robot(robotData, item.position))
+      databus.enemys.push(new Robot(robotData, item.position, 1))
     })
   }
   /**
@@ -135,7 +136,7 @@ export default class Main {
    * 每一帧重新绘制所有的需要展示的元素
    */
   render() {
-    this.viewportManager.clearRect()
+    ctx.clearRect(-this.evt.translateX, -this.evt.translateY, SCREEN_WIDTH, SCREEN_HEIGHT)
     mainCtx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
     this.bg.render(ctx)
@@ -147,12 +148,12 @@ export default class Main {
       })
 
     // this.player.drawToCanvas(ctx)
-
     databus.animations.forEach((ani) => {
       if (ani.isPlaying) {
         ani.aniRender(ctx)
       }
     })
+    this.evt.drawToCanvas()
 
     this.gameinfo.renderGameScore(ctx, databus.score)
 

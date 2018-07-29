@@ -1,20 +1,27 @@
 import Sprite from '../base/sprite'
 import Animation from '../base/animation'
-import DataBus  from '../databus'
 
-let {GRID_LENGTH} = require('src/js/utils').default
+let {GRID_LENGTH, getLen} = require('src/js/utils').default
 
-// 玩家相关常量设置
-const PLAYER_IMG_SRC = 'images/hero.png'
-
-let databus = new DataBus()
+const ROBOT_TYPE = {
+  PLAYER: 0,
+  ENEMY: 1,
+  NPC: 2
+}
 
 export default class Robot extends Sprite {
-  constructor(properties, position) {
-    super('images/' + properties.icon, GRID_LENGTH, GRID_LENGTH, position[0], position[1])
+  constructor(properties, position, type = ROBOT_TYPE.PLAYER) {
+    super('images/' + properties.icon, GRID_LENGTH, GRID_LENGTH, getLen(position[0]), getLen(position[1]))
+
+    this.posX = position[0]
+    this.posY = position[1]
+
+    this.type = type
 
     Object.assign(this, properties)
 
+    this.currentHP = this.HP
+    this.currentEN = this.EN
   }
 
   showMoveRange() {

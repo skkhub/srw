@@ -21,3 +21,9 @@ export const SCREEN_WIDTH = screenWidth
 export const SCREEN_HEIGHT = screenHeight;
 
 export const GRID_LENGTH = 64
+
+export const DIALOG_SRC = 'images/Common.png'
+
+export const DEFAULT_COLOR = 'gray'
+
+export const BASE_FONT_SIZE = screenWidth / 30

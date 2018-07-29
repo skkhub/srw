@@ -1,5 +1,3 @@
-let {getLen} = require('src/js/utils').default
-
 /**
  * 游戏基础的精灵类
  */
@@ -26,8 +24,8 @@ export default class Sprite {
 
     ctx.drawImage(
       this.img,
-      getLen(this.x),
-      getLen(this.y),
+      this.x,
+      this.y,
       this.width,
       this.height
     )

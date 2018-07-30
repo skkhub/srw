@@ -19,9 +19,17 @@ export default class Robot extends Sprite {
     this.type = type
 
     Object.assign(this, properties)
+    // 战时状态
+    this.wartime = {
+      HP: this.HP,
+      EN: this.EN,
+      canMove: true,
+      canAttack: true, // todo: 能否攻击的判断
+      canTransform: !!this.abilities['transform'],
+      canSpirit: true
+    }
+    
 
-    this.currentHP = this.HP
-    this.currentEN = this.EN
   }
 
   showMoveRange() {

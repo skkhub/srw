@@ -129,6 +129,8 @@ export default class Event {
         break
       case STATUS.MAP_MAIN: this.mapMainHandler()
         break
+      case STATUS.MAP_MENU: this.mapMainHandler()
+        break
     }
   }
 

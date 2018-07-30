@@ -18,17 +18,12 @@ export default {
         attr: ['p', 'b'] // 属性：移动后可攻击，光束类武器
       }
     ],
-    abilities: [
-      {
-        name: '变形'
-      },
-      {
+    abilities: {
+      'split': {
         name: '分身',
-        require: {
-          morale: 130 // 触发条件为气力130以上
-        }
+        require: 130
       }
-    ],
+    },
     parts: [] // 安装在机体的增强零件
   },
   '002': {
@@ -48,11 +43,11 @@ export default {
         attr: ['b'] // 属性：移动后可攻击，光束类武器
       }
     ],
-    abilities: [
-      {
+    abilities: {
+      'transform': {
         name: '变形'
       }
-    ],
+    },
     parts: [] // 安装在机体的增强零件
   },
   '501': {
@@ -72,17 +67,7 @@ export default {
         attr: ['p', 'b'] // 属性：移动后可攻击，光束类武器
       }
     ],
-    abilities: [
-      {
-        name: '变形'
-      },
-      {
-        name: '分身',
-        require: {
-          morale: 130 // 触发条件为气力130以上
-        }
-      }
-    ],
+    abilities: {},
     parts: [] // 安装在机体的增强零件
   },
   '502': {
@@ -102,11 +87,7 @@ export default {
         attr: ['b'] // 属性：移动后可攻击，光束类武器
       }
     ],
-    abilities: [
-      {
-        name: '变形'
-      }
-    ],
+    abilities: {},
     parts: [] // 安装在机体的增强零件
   }
 }

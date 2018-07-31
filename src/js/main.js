@@ -17,6 +17,7 @@ offscreenCanvas.height = canvas.height = SCREEN_HEIGHT
 const ctx = offscreenCanvas.getContext('2d')
 const mainCtx = canvas.getContext('2d')
 // const ctx = canvas.getContext('2d')
+ctx.textBaseline = 'middle'
 
 let databus = new DataBus()
 

@@ -38,7 +38,12 @@ export default class Event {
     this.ctx = ctx
     this.mapWidth = getLen(mapWidth)
     this.mapHeight = getLen(mapHeight)
-
+    // 记录手指点击屏幕时的坐标
+    this.x = 0
+    this.y = 0
+    // 记录pointer所在的地图坐标
+    this.posX = 0
+    this.posY = 0
     // 记录视口的偏移
     this.translateX = 0
     this.translateY = 0
@@ -111,17 +116,14 @@ export default class Event {
   touchmoveHandler(e) {
     e.preventDefault()
     // 一旦移动，取消当次指令
-    // this.valid = false
+    this.valid = false
   }
 
   touchendHandler(e) {
     e.preventDefault()
-
     if (!this.valid)
       return
-
     this.savePosition(e)
-
     switch(this.status) {
       case STATUS.GAME_ENTRANCE: console.log('GAME_ENTRANCE')
         break
@@ -129,7 +131,7 @@ export default class Event {
         break
       case STATUS.MAP_MAIN: this.mapMainHandler()
         break
-      case STATUS.MAP_MENU: this.mapMainHandler()
+      case STATUS.MAP_MENU: this.mapMenuHandler()
         break
     }
   }
@@ -137,22 +139,36 @@ export default class Event {
   savePosition(e) {
     let clientX = e.changedTouches[0].clientX
     let clientY = e.changedTouches[0].clientY
-
-    this.posX = ((clientX - this.translateX) / GRID_LENGTH) | 0
-    this.posY = ((clientY - this.translateY) / GRID_LENGTH) | 0
+    this.x = clientX
+    this.y = clientY
   }
 
   mapMainHandler() {
+    this.posX = ((this.x - this.translateX) / GRID_LENGTH) | 0
+    this.posY = ((this.y - this.translateY) / GRID_LENGTH) | 0
     console.log(this.posX, this.posY)
-    let player = databus.players.find(robot => (robot.posX == this.posX) && (robot.posY == this.posY))
+    let player = databus.players.concat(databus.enemys)
+      .find(robot => (robot.posX == this.posX) && (robot.posY == this.posY))
 
     if (player) {
-      // this.mapMenuPlayer = player
       this.dialogMapMenu.setRobot(player)
+      this.dialogMapMenu.visible = true
       this.status = STATUS.MAP_MENU
+    } else {
+      this.dialogMapMenu.visible = false
+      this.status = STATUS.MAP_MAIN
     }
   }
 
+  mapMenuHandler() {
+    if (this.y < SCREEN_HEIGHT - this.dialogMapMenu.dialogHeight) {
+      this.mapMainHandler()
+    } else {
+      console.log('mapMenu')
+      this.dialogMapMenu.handleDirectives(this.x, this.y)
+    }
+  }
+  
   viewportTouchstartHandler(e) {
     e.preventDefault()
 
@@ -167,6 +183,9 @@ export default class Event {
 
     let currentX = e.changedTouches[0].clientX
     let currentY = e.changedTouches[0].clientY
+    if (this.status == STATUS.MAP_MENU && currentY > SCREEN_HEIGHT - this.dialogMapMenu.dialogHeight) {
+      return
+    }
     let currentTime = Date.now()
 
     let kx = (currentX - this.viewportBeginX) / (currentTime - this.viewportBeginTime) * 20
@@ -201,11 +220,8 @@ export default class Event {
   drawToCanvas() {
     this.renderPointer()
 
-    if (this.status == STATUS.MAP_MENU) {
-      this.dialogMapMenu.drawToCanvas(this.ctx)
-      // new DialogMapMenu(this.mapMenuPlayer, this.mapWidth, this.mapHeight).renderMenu(this.ctx)
-      console.log('0')
-    }
+    this.dialogMapMenu.drawToCanvas(this.ctx)
+
   }
   renderPointer() {
     let ctx = this.ctx

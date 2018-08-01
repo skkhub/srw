@@ -15,15 +15,19 @@ let dialogIcon = new Image()
 let instance
 // drawToCanvas函数用到的变量
 const dialogHeight = 200
-
 const itemWidth = SCREEN_WIDTH / 6 | 0
 const itemHeight = 40
 const itemSpace = SCREEN_WIDTH / 20 | 0
 const paddingX = SCREEN_WIDTH * 0.08
 const iconWidth = 70
 const iconHeight = 70
-let HPWidth = SCREEN_WIDTH * 0.48 - paddingX  // 血条宽度
+const HPWidth = SCREEN_WIDTH * 0.48 - paddingX  // 血条宽度
 
+const itemScreenX1 = paddingX
+const itemScreenX2 = paddingX + itemWidth + itemSpace
+const itemScreenY1 = SCREEN_HEIGHT - dialogHeight + 32
+const itemScreenY2 = SCREEN_HEIGHT - dialogHeight + 82
+const itemScreenY3 = SCREEN_HEIGHT - dialogHeight + 132
 /**
  * 游戏对话框类
  */
@@ -37,6 +41,7 @@ export default class DialogMapMenu {
     this.evt = evt
     this.robot = null
     this.icon = ''
+    this.dialogHeight = dialogHeight
     this.visible = true
   }
 
@@ -84,22 +89,24 @@ export default class DialogMapMenu {
 
     ctx.fillStyle = '#fff'
     ctx.font    = `${BASE_FONT_SIZE * 1.6}px Arial`
-    const itemX1 = dialogOriginX + paddingX
-    const itemX2 = dialogOriginX + paddingX + itemWidth + itemSpace
-    const itemY1 = dialogOriginY + 32
-    const itemY2 = dialogOriginY + 82
-    const itemY3 = dialogOriginY + 132
+    const itemX1 = itemScreenX1 - this.evt.translateX
+    const itemX2 = itemScreenX2 - this.evt.translateX
+    const itemY1 = itemScreenY1 - this.evt.translateY
+    const itemY2 = itemScreenY2 - this.evt.translateY
+    const itemY3 = itemScreenY3 - this.evt.translateY
+    
     // 画指令菜单
     let pos = [[itemX1, itemY1], [itemX2, itemY1], [itemX1, itemY2], [itemX2, itemY2], [itemX1, itemY3], [itemX2, itemY3]]
     this.directives.forEach((item, index) => {
+      // ctx.strokeRect(pos[index][0], pos[index][1], itemWidth, itemHeight)
       ctx.drawImage(
         dialogImg,
-        120, 7, 38, 22,
+        121, 7, 37, 22,
         pos[index][0], pos[index][1], itemWidth, itemHeight
       )
       ctx.fillText(
         item,
-        pos[index][0] + 12,
+        pos[index][0] + 13,
         pos[index][1] + itemHeight / 2
       )
     })
@@ -159,5 +166,9 @@ export default class DialogMapMenu {
       iconHeight
     )
     ctx.restore()
+  }
+
+  handleDirectives(x, y) {
+    
   }
 }

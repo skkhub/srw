@@ -52,7 +52,7 @@ export default {
   },
   '501': {
     icon: 'enemy.png',
-    name: '塞巴斯塔',
+    name: '小巴巴',
     HP: 4000,
     EN: 140,
     flexibility: 110,
@@ -72,7 +72,7 @@ export default {
   },
   '502': {
     icon: 'enemy.png',
-    name: '高达Z',
+    name: '老巴巴',
     HP: 3800,
     EN: 160,
     flexibility: 120,

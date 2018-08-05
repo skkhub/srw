@@ -15,7 +15,7 @@ export default class BackGround extends Sprite {
 
     this.mapWidth = bgInfo.mapWidth
     this.mapHeight = bgInfo.mapHeight
-    this.hasDraw = false
+    // this.hasDraw = false
 
     this.render(ctx)
   }
@@ -29,7 +29,7 @@ export default class BackGround extends Sprite {
    * 
    */
   render(ctx) {
-    if (this.hasDraw) return
+    // if (this.hasDraw) return
 
     ctx.drawImage(
       this.img,

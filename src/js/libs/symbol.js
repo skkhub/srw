@@ -15,3 +15,13 @@ if (!Symbol) {
 }
 
 window.Symbol = Symbol
+
+let performance = window.performance
+
+if (!performance) {
+  performance = {
+    now: Date.now
+  }
+}
+
+window.performance = performance

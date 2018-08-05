@@ -17,6 +17,7 @@ const STATUS = {
   MAP_MAIN: 201,
   MAP_MENU: 202,  // 打开robot菜单
   MAP_MOVE: 203,
+  // MAP_MENU2: 206, // 移动后攻击
   MAP_ATTACK: 204,
   MAP_SYSTEM: 205,  // 打开系统菜单
   BATTLE_ENTRANCE: 301,
@@ -86,7 +87,7 @@ export default class Event {
   initViewportEvent() {
     this.viewportBeginX = 0
     this.viewportBeginY = 0
-    this.viewportBeginTime = Date.now()
+    this.viewportBeginTime = window.performance.now()
     
     if (!this._isBindViewportEvent) {
       // 绑定作用域
@@ -100,7 +101,6 @@ export default class Event {
     this.canvas.addEventListener('touchmove', this.viewportTouchmoveHandler)
     this.canvas.addEventListener('touchend', this.viewportTouchendHandler)
   }
-
   removeViewportEvent() {
     this.canvas.removeEventListener('touchstart', this.viewportTouchstartHandler)
     this.canvas.removeEventListener('touchmove', this.viewportTouchmoveHandler)
@@ -112,13 +112,11 @@ export default class Event {
 
     this.valid = true
   }
-
   touchmoveHandler(e) {
     e.preventDefault()
     // 一旦移动，取消当次指令
     this.valid = false
   }
-
   touchendHandler(e) {
     e.preventDefault()
     if (!this.valid)
@@ -133,9 +131,10 @@ export default class Event {
         break
       case STATUS.MAP_MENU: this.mapMenuHandler()
         break
+      case STATUS.MAP_MOVE: this.mapMoveHandler()
+        break
     }
   }
-
   savePosition(e) {
     let clientX = e.changedTouches[0].clientX
     let clientY = e.changedTouches[0].clientY
@@ -147,46 +146,86 @@ export default class Event {
     this.posX = ((this.x - this.translateX) / GRID_LENGTH) | 0
     this.posY = ((this.y - this.translateY) / GRID_LENGTH) | 0
     console.log(this.posX, this.posY)
-    let player = databus.players.concat(databus.enemys)
-      .find(robot => (robot.posX == this.posX) && (robot.posY == this.posY))
-
-    if (player) {
-      this.dialogMapMenu.setRobot(player)
+    let k = `${this.posX}_${this.posY}`
+    let robot = databus.players[k] || databus.enemys[k]
+    if (robot) {
+      this.dialogMapMenu.setRobot(robot)
       this.dialogMapMenu.visible = true
-      this.status = STATUS.MAP_MENU
+      this.setStatus(STATUS.MAP_MENU)
     } else {
       this.dialogMapMenu.visible = false
-      this.status = STATUS.MAP_MAIN
+      this.setStatus(STATUS.MAP_MAIN)      
     }
   }
-
   mapMenuHandler() {
     if (this.y < SCREEN_HEIGHT - this.dialogMapMenu.dialogHeight) {
       this.mapMainHandler()
     } else {
-      console.log('mapMenu')
-      this.dialogMapMenu.handleDirectives(this.x, this.y)
+      // console.log('mapMenu')
+      let directive = this.dialogMapMenu.judgeDirective(this.x, this.y)
+      switch(directive) {
+        case '移动': this.directiveMove()
+      }
     }
   }
-  
+  mapMoveHandler() {
+    let robot = this.dialogMapMenu.robot
+    this.ctx.beginPath()
+    robot.drawRange(this.ctx, robot.move, robot.x, robot.y)
+    // console.log(this.x, this.y, robot.x, robot.y)
+    if(this.ctx.isPointInPath(this.x, this.y)) {
+      let posX = (this.x / GRID_LENGTH) | 0
+      let posY = (this.y / GRID_LENGTH) | 0
+      let key = `${posX}_${posY}`
+      let flag = !(databus.players[key] || databus.enemys[key])
+      if (flag) {
+        console.log(databus.players)
+        let oldKey = `${robot.posX}_${robot.posY}`
+        delete databus.players[oldKey]
+        console.log('robot move!', robot)
+        robot.showMoveRange(false)
+        robot.doMove(posX, posY)
+        databus.players[key] = robot
+        console.log(databus.players)
+
+        this.setStatus(STATUS.MAP_MENU)
+      }
+    } else {
+      robot.showMoveRange(false)
+      this.setStatus(STATUS.MAP_MENU)
+      this.mapMenuHandler()
+    }
+  }
+
+  directiveMove() {
+    this.dialogMapMenu.robot.showMoveRange()
+    this.setStatus(STATUS.MAP_MOVE)
+  }
+
+  setStatus(status) {
+    this.status != status && (this.status = status)
+  }
+
   viewportTouchstartHandler(e) {
     e.preventDefault()
 
     this.viewportBeginX = e.touches[0].clientX
     this.viewportBeginY = e.touches[0].clientY
 
-    this.viewportBeginTime = Date.now()
+    this.viewportBeginTime = window.performance.now()
   }
 
   viewportTouchmoveHandler(e) {
     e.preventDefault()
+    // alert(e.changedTouches[0].identifier)
+    // if (e.changedTouches[0].identifier != 0) return
 
     let currentX = e.changedTouches[0].clientX
     let currentY = e.changedTouches[0].clientY
     if (this.status == STATUS.MAP_MENU && currentY > SCREEN_HEIGHT - this.dialogMapMenu.dialogHeight) {
       return
     }
-    let currentTime = Date.now()
+    let currentTime = window.performance.now()
 
     let kx = (currentX - this.viewportBeginX) / (currentTime - this.viewportBeginTime) * 20
     let ky = (currentY - this.viewportBeginY) / (currentTime - this.viewportBeginTime) * 20

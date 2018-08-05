@@ -42,6 +42,7 @@ export default class Main {
       'touchstart',
       this.touchHandler
     )
+    databus.initMapInfo(mission.bgInfo.grid)
     this.robotGenerate(mission)
     this.bg = new BackGround(ctx, mission.bgInfo)
     // this.player = new Robot('images/hero.png', 2, 2)
@@ -65,13 +66,18 @@ export default class Main {
 
     players.forEach(item => {
       let robotData = selectRobotById(item.id)
-      databus.players.push(new Robot(robotData, item.position, 0))
+      // databus.players.push(new Robot(robotData, item.position, 0))
+      let k = `${item.position[0]}_${item.position[1]}`
+      databus.players[k] = new Robot(robotData, item.position, 0)
     })
-
+    
     enemys.forEach(item => {
       let robotData = selectRobotById(item.id)
-      databus.enemys.push(new Robot(robotData, item.position, 1))
+      // databus.enemys.push(new Robot(robotData, item.position, 1))
+      let k = `${item.position[0]}_${item.position[1]}`
+      databus.enemys[k] = new Robot(robotData, item.position, 0)
     })
+    // databus.updateRobotMapInfo()
   }
   /**
    * 随着帧数变化的敌机生成逻辑
@@ -142,12 +148,12 @@ export default class Main {
 
     this.bg.render(ctx)
 
-    databus.players
-      .concat(databus.enemys)
-      .forEach((item) => {
-        item.drawToCanvas(ctx)
-      })
-
+    for (let k in databus.players) {
+      databus.players[k].drawToCanvas(ctx)
+    }
+    for (let k in databus.enemys) {
+      databus.enemys[k].drawToCanvas(ctx)
+    }
     // this.player.drawToCanvas(ctx)
     databus.animations.forEach((ani) => {
       if (ani.isPlaying) {
@@ -163,24 +169,30 @@ export default class Main {
 
   // 游戏逻辑更新主函数
   update() {
-    this.bg.update()
+    // this.bg.update()
 
-    databus.bullets
-      .concat(databus.enemys)
-      .forEach((item) => {
-        item.update()
-      })
+    // databus.bullets
+    //   .concat(databus.enemys)
+    //   .forEach((item) => {
+    //     item.update()
+    //   })
 
     // this.enemyGenerate()
 
     // this.collisionDetection()
+    for (let k in databus.players) {
+      databus.players[k].update()
+    }
+    for (let k in databus.enemys) {
+      databus.enemys[k].update()
+    }
   }
 
   // 实现游戏帧循环
   loop() {
     databus.frame++
 
-    // this.update()
+    this.update()
     this.render()
 
     if (databus.frame % 20 === 0) {

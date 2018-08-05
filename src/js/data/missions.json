@@ -3,7 +3,7 @@
     "mapWidth": 16,
     "mapHeight": 30,
     "bgImgSrc": "images/bg.jpg",
-    "gird": {
+    "grid": {
       "0_0": {
         "move": -1,
         "defence": 0.2,
@@ -25,11 +25,11 @@
   "players": [
     {
       "id": "001",
-      "position": [1,1]
+      "position": [2,2]
     },
     {
       "id": "002",
-      "position": [2,1]
+      "position": [3,2]
     }
   ]
 }

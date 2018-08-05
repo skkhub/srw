@@ -49,12 +49,16 @@ export default class DialogMapMenu {
     this.robot = robot
     dialogIcon.src = require('src/images/' + robot.icon)
     this.directives = []
-    for (let k in robot.wartime) {
-      let directive = directiveMap[k]
-      if (directiveMap[k] && robot.wartime[k]) {
-        this.directives.push(directive)
+
+    if (robot.type == 0) {
+      for (let k in robot.wartime) {
+        let directive = directiveMap[k]
+        if (directive && robot.wartime[k]) {
+          this.directives.push(directive)
+        }
       }
     }
+
     this.directives.push('能力')
   }
   /**
@@ -168,7 +172,43 @@ export default class DialogMapMenu {
     ctx.restore()
   }
 
+  judgeDirective(x, y) {
+    let index = -1
+
+    if (x > itemScreenX1 && x < itemScreenX1 + itemWidth) {
+      if (y > itemScreenY1 && y < itemScreenY1 + itemHeight) {
+        index = 0
+      } else if (y > itemScreenY2 && y < itemScreenY2 + itemHeight) {
+        index = 2
+      } else if (y > itemScreenY3 && y < itemScreenY3 + itemHeight) {
+        index = 4
+      }
+    } else if (x > itemScreenX2 && x < itemScreenX2 + itemWidth) {
+      if (y > itemScreenY1 && y < itemScreenY1 + itemHeight) {
+        index = 1
+      } else if (y > itemScreenY2 && y < itemScreenY2 + itemHeight) {
+        index = 3
+      } else if (y > itemScreenY3 && y < itemScreenY3 + itemHeight) {
+        index = 5
+      }
+    }
+
+    if (index > -1 && this.directives[index]) {
+      return this.directives[index]
+    }
+
+    return false
+  }
+
   handleDirectives(x, y) {
+    let directive = this.judgeDirective(x, y)
+    if (!directive) {
+      return
+    }
+
+    switch(directive) {
+      case '移动': return this.robot.showMoveRange
+    }
     
   }
 }

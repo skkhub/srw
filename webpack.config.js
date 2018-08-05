@@ -26,13 +26,14 @@ module.exports = (env, argv) => ({
   devtool: '#eval-source-map',
 
   entry: {
-    main: './src/index.js'
+    main: './src/index.js',
+    demo: './src/demo.js'
   },
 
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: argv.mode == 'development' ? '/' : './',
-    filename: 'assets/[name].bundle.[hash].js'
+    filename: 'assets/[name].[hash].js'
   },
   resolve: {
     extensions: ['.js', '.json'],
@@ -50,7 +51,15 @@ module.exports = (env, argv) => ({
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       title: 'srw',
-      template: './index.html'
+      template: './index.html',
+      chunks: ['main']
+    }),
+    new HtmlWebpackPlugin({
+      title: 'srw',
+      filename: 'demo.html',
+      template: './index.html',
+      showErrors: true,
+      chunks: ['demo']
     })
   ],
 

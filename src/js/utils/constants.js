@@ -20,7 +20,7 @@ if (typeof screenWidth != 'number') {       //如果类型不为number,表示该
 export const SCREEN_WIDTH = screenWidth
 export const SCREEN_HEIGHT = screenHeight;
 
-export const GRID_LENGTH = 64
+export const GRID_LENGTH = 48
 
 export const DIALOG_SRC = 'images/Common.png'
 

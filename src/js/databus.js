@@ -21,10 +21,11 @@ export default class DataBus {
     this.frame      = 0
     this.score      = 0
     this.bullets    = []
-    this.enemys     = []
-    this.players    = []
+    this.enemys     = {}
+    this.players    = {}
     this.animations = []
     this.gameOver   = false
+    this.mapInfo    = {}
   }
 
   /**
@@ -56,6 +57,18 @@ export default class DataBus {
     }
   }
 
+  initMapInfo(grid) {
+    for (let k in grid) {
+      this.mapInfo[k] = grid[k]
+    }
+  }
+
+  // updateRobotMapInfo() {
+  //   this.players.concat(this.enemys).forEach(robot => {
+  //     let k = `${robot.posX}_${robot.posY}`
+  //     this.mapInfo[k] = robot
+  //   })
+  // }
   /**
    * 回收敌人，进入对象池
    * 此后不进入帧循环
